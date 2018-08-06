@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="samj" translate="label" sortOrder="9999999">
+            <label>SamJ</label>
+        </tab>
+        <section id="samj_instagram" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Instagram</label>
+            <tab>samj</tab>
+            <resource>SamJ_Instagram::main_config</resource>
+
+            <group id="overview" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Overview</label>
+                <field id="data" translate="label" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <frontend_model>SamJ\Instagram\Block\Adminhtml\System\Overview\Data</frontend_model>
+                </field>
+            </group>
+
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Module Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="cache_lifetime" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Cache Lifetime</label>
+                    <comment>Lifetime before refetching in seconds</comment>
+                </field>
+            </group>
+
+            <group id="credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Credentials</label>
+                <field id="client_id" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Client ID</label>
+                </field>
+                <field id="client_secret" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Client Secret</label>
+                </field>
+                <field id="access_token" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Access Token</label>
+                    <frontend_model>SamJ\Instagram\Block\Adminhtml\System\Readonly</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
