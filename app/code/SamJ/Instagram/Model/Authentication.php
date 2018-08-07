@@ -2,6 +2,8 @@
 
 namespace SamJ\Instagram\Model;
 
+use SamJ\Instagram\Model\Base as InstagramBase;
+
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Customer\Model\Visitor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -13,20 +15,14 @@ use Magento\Framework\Registry;
 use Magento\Framework\Url;
 use Magento\Store\Model\ScopeInterface;
 
-class Instagram extends AbstractModel
+class Authentication extends InstagramBase
 {
 
     const API_AUTH_URL = 'https://api.instagram.com/oauth/authorize/';
     const API_TOKEN_URL = 'https://api.instagram.com/oauth/access_token/';
-    const API_USER_SELF = 'https://api.instagram.com/v1/users/self/';
-
 
     const XML_PATH_CLIENT_ID = 'samj_instagram/credentials/client_id';
     const XML_PATH_CLIENT_SECRET = 'samj_instagram/credentials/client_secret';
-    const XML_PATH_ACCESS_TOKEN = 'samj_instagram/credentials/access_token';
-
-
-    const ERROR_INVALID_TOKEN = 'OAuthAccessTokenException';
 
 
     /** @var ScopeConfigInterface  */
@@ -126,20 +122,6 @@ class Instagram extends AbstractModel
 
 
     /**
-     * Get the current Access Token from the system config
-     *
-     * @return mixed
-     */
-    public function getAccessToken()
-    {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_ACCESS_TOKEN,
-            ScopeInterface::SCOPE_STORE
-        );
-    }
-
-
-    /**
      * Fetch the authorization frontend redirect URI
      *
      * @return string
@@ -161,7 +143,7 @@ class Instagram extends AbstractModel
      */
     public function fetchAccessToken($code)
     {
-        $res = $this->cURL( self::API_TOKEN_URL, $this->getAccessTokenParams($code));
+        $res = $this->cURL( self::API_TOKEN_URL, 1, $this->getAccessTokenParams($code));
         $result = json_decode($res);
 
         return ($result && isset($result->access_token))
@@ -198,42 +180,5 @@ class Instagram extends AbstractModel
     {
         return $this->resourceConfig->saveConfig( self::XML_PATH_ACCESS_TOKEN, $token );
     }
-
-
-    /**
-     * Check if our access token is valid
-     *
-     * @return bool
-     */
-    public function isAccessTokenValid()
-    {
-        $url = self::API_USER_SELF . '?access_token=' .$this->getAccessToken();
-        $result = $this->cURL($url);
-        $json = json_decode($result);
-
-        $is_response_valid = isset($json->meta->code) && $json->meta->code === 200;
-        return $is_response_valid;
-    }
-
-
-    /**
-     * Perform a CURL Request
-     *
-     * @param $url
-     * @param array $param
-     * @return mixed
-     */
-    private function cURL($url, $param = array())
-    {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $param);
-
-        $result = curl_exec($ch);
-        curl_close($ch);
-        return $result;
-    }
-
 
 }

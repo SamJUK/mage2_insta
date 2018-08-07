@@ -5,24 +5,24 @@ namespace SamJ\Instagram\Controller\Authorize;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use SamJ\Instagram\Model\Instagram;
+use SamJ\Instagram\Model\Authentication;
 
 class Response extends Action
 {
     /** @var Http */
     private $request;
 
-    /** @var Instagram */
+    /** @var Authentication */
     private $instagram;
 
 
     /**
      * Response constructor.
-     * @param Instagram $instagram
+     * @param Authentication $instagram
      * @param Context $context
      * @param Http $request
      */
-    public function __construct( Instagram $instagram, Context $context, Http $request)
+    public function __construct(Authentication $instagram, Context $context, Http $request)
     {
         $this->instagram = $instagram;
         $this->request = $request;

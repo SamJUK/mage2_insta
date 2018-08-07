@@ -4,21 +4,21 @@ namespace SamJ\Instagram\Block\Adminhtml\System\Overview;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
-use SamJ\Instagram\Model\Instagram;
+use SamJ\Instagram\Model\Authentication;
 
 class Data extends AbstractFieldArray
 {
-    /** @var Instagram */
+    /** @var Authentication */
     private $instagram;
 
 
     /**
      * Data constructor.
-     * @param Instagram $instagram
+     * @param Authentication $instagram
      * @param Context $context
      * @param array $data
      */
-    public function __construct(Instagram $instagram, Context $context, array $data = [])
+    public function __construct(Authentication $instagram, Context $context, array $data = [])
     {
         $this->instagram = $instagram;
         parent::__construct($context, $data);
@@ -88,8 +88,12 @@ class Data extends AbstractFieldArray
             ? '<span style="color:green;">Valid</span>'
             : '<span style="color:red;">Invalid</span>';
 
-        $template = ' <strong>Access Token Status: </strong> %s ';
-        return sprintf( $template, $validity );
+        $extra = $validity
+            ? '<span> For user <pre style="display: inline-flex;background: #f4f4f4;padding: 0 4px;border: 1px solid #eaeaea;">'.$this->instagram->getCurrentAuthenticatedUser().'</pre></span>'
+            : '';
+
+        $template = ' <strong>Access Token Status: </strong> %s %s';
+        return sprintf( $template, $validity , $extra);
     }
 
 }
