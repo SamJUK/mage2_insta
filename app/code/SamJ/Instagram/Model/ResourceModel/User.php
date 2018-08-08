@@ -2,45 +2,57 @@
 
 namespace SamJ\Instagram\Model\ResourceModel;
 
-//use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 use SamJ\Instagram\Model\Base;
 
-class User
+class User extends AbstractDb
 {
+    protected $_idFieldName = 'id';
     const API_ENDPOINT_SELF = 'https://api.instagram.com/v1/users/self/';
 
     protected $curl;
     protected $instagram;
 
-    protected function __construct( Curl $curl, Base $instagram)
+
+    protected function _construct() { }
+
+    public function __construct( Curl $curl, Base $instagram)
     {
         $this->curl = $curl;
         $this->instagram = $instagram;
     }
 
-    protected function _construct()
-    {
-    }
-
     // Override CRUD methods
     // Save/Load/Delete ?
-    public function save(){}
     public function load(AbstractModel $object, $value, $field = null)
     {
         $object->beforeLoad($value, $field);
 
-        $url = SELF::API_ENDPOINT_SELF . '?access_token=' . $this->instagram->getAccessToken();
+        $url = self::API_ENDPOINT_SELF . '?access_token=' . $this->instagram->getAccessToken();
+        $this->curl->setConfig(['header' => false]);
         $this->curl->write(\Zend_Http_Client::GET, $url);
-        $res = $this->curl->read();
 
-        echo '<pre>';
-        var_dump($res);
-        echo '</pre>';
-        die;
+
+        // @TODO: VALIDATE REPONSE AND STUFF
+        $data = json_decode($this->curl->read(), true)['data'];
+
+        if($data){
+            $object->setData($data);
+        }
+
+        $this->unserializeFields($object);
+        $this->_afterLoad($object);
+        $object->afterLoad();
+        $object->setOrigData();
+        $object->setHasDataChanges(false);
+
+        return $this;
     }
-    public function delete(){}
+
+    public function save(AbstractModel $object){}
+    public function delete(AbstractModel $object){}
 }

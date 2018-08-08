@@ -4,6 +4,7 @@ namespace SamJ\Instagram\Model;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Base extends AbstractModel
 {
@@ -19,9 +20,15 @@ class Base extends AbstractModel
     protected $scopeConfig;
 
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
     ){
         $this->scopeConfig = $scopeConfig;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
 

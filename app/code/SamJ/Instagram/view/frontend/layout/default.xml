@@ -9,6 +9,7 @@
     <body>
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\Template" name="samj.instagram.wrapper" template="SamJ_Instagram::wrapper.phtml">
+                <block class="SamJ\Instagram\Block\Users" name="samj.instagram.info" template="SamJ_Instagram::info.phtml"/>
                 <block class="SamJ\Instagram\Block\Posts" name="samj.instagram.feed" template="SamJ_Instagram::feed.phtml"/>
             </block>
         </referenceContainer>
