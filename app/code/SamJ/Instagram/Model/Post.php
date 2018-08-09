@@ -2,11 +2,14 @@
 
 namespace SamJ\Instagram\Model;
 
-use \Magento\Framework\Model\AbstractModel;
+use SamJ\Instagram\Model\Base as InstagramBase;
 
-class Post extends AbstractModel
+class Post extends InstagramBase
 {
 
-
+    public function _construct()
+    {
+        $this->_init(\SamJ\Instagram\Model\ResourceModel\Post::class);
+    }
 
 }

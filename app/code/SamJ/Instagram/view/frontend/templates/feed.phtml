@@ -1,7 +1,9 @@
 <?php /** @var $block \SamJ\Instagram\Block\Posts */ ?>
+<?php $feed = $block->getFeed(); ?>
 <ul>
-    <li>Post</li>
-    <li>Post</li>
-    <li>Post</li>
-    <li>Post</li>
+    <?php foreach ($feed as $item): ?>
+        <li>
+            <img src="<?php echo $item['images']['standard_resolution']['url'] ?>" alt="<?php echo $item['caption']['text'] ?>" style="height: 150px;width:150px;"/>
+        </li>
+    <?php endforeach; ?>
 </ul>
