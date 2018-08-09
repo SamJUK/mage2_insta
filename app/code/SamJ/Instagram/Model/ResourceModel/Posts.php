@@ -6,10 +6,11 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use SamJ\Instagram\Model\Post;
 
 use SamJ\Instagram\Model\Base;
 
-class Post extends AbstractDb
+class Posts extends AbstractDb
 {
     protected $_idFieldName = 'id';
     const API_ENDPOINT_SELF = 'https://api.instagram.com/v1/users/self/media/recent/';
@@ -17,13 +18,15 @@ class Post extends AbstractDb
     protected $curl;
     protected $instagram;
 
+    protected $post_model;
 
     protected function _construct() { }
 
-    public function __construct( Curl $curl, Base $instagram)
+    public function __construct( Curl $curl, Base $instagram, Post $post_model)
     {
         $this->curl = $curl;
         $this->instagram = $instagram;
+        $this->post_model = $post_model;
     }
 
     // Override CRUD methods
@@ -39,10 +42,21 @@ class Post extends AbstractDb
 
         // @TODO: VALIDATE REPONSE AND STUFF
         $data = json_decode($this->curl->read(), true)['data'];
+        $array = array();
+
+
+        // @TODO: Better way to do this?
+        foreach ($data as $item){
+            $post = clone $this->post_model;
+            $post->setData($item);
+            $array[] = $post;
+        }
+
 
         if($data){
-            $object->setData($data);
+            $object->setData($array);
         }
+
 
         $this->unserializeFields($object);
         $this->_afterLoad($object);

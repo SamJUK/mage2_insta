@@ -10,7 +10,7 @@ class Posts extends Template
     protected $posts;
 
     public function __construct(
-        \SamJ\Instagram\Model\Post $post,
+        \SamJ\Instagram\Model\Posts $post,
         \Magento\Backend\Block\Template\Context $context,
         array $data = []
     ){

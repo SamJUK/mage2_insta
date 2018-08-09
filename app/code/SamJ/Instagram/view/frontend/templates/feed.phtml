@@ -3,7 +3,10 @@
 <ul>
     <?php foreach ($feed as $item): ?>
         <li>
-            <img src="<?php echo $item['images']['standard_resolution']['url'] ?>" alt="<?php echo $item['caption']['text'] ?>" style="height: 150px;width:150px;"/>
+            <p><?php echo get_class($item); ?></p>
+            <a href="<?php echo $item->getUrl() ?>" target="_blank">
+                <img src="<?php echo $item->getImageUrl() ?>" alt="<?php echo $item->getCaptionText() ?>" style="height: 150px;width:150px;"/>
+            </a>
         </li>
     <?php endforeach; ?>
 </ul>
