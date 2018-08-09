@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="samj_instagramx " translate="label,description" instance="SamJ\Instagram\Model\Cache\Type">
+        <label>SamJ Instagram Cache</label>
+        <description>Caching for SamJ Instagram Module</description>
+    </type>
+</config>
