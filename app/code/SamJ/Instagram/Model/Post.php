@@ -4,16 +4,12 @@ namespace SamJ\Instagram\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use SamJ\Instagram\Model\Base as InstagramBase;
-use SamJ\Instagram\Model\Caption;
 
 class Post extends InstagramBase
 {
     const VALID_RESOLUTIONS = ['standard_resolution', 'low_resolution', 'thumbnail'];
 
-    protected $caption_model;
-
     public function __construct(
-        Caption $caption_model,
         ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -21,7 +17,6 @@ class Post extends InstagramBase
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ){
-        $this->caption_model = $caption_model;
         parent::__construct($scopeConfig, $context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -79,16 +74,9 @@ class Post extends InstagramBase
     }
 
 
-    public function getCaption()
+    public function getText()
     {
-        if($this->caption_model->getData() === null){
-            $this->caption_model->setData($this->getData('caption'));
-        }
-        return $this->caption_model;
+        return $this->getCaption()['text'];
     }
 
-    public function getCaptionText()
-    {
-        return $this->getCaption()->getText();
-    }
 }

@@ -63,7 +63,7 @@ class Authentication extends InstagramBase
         $this->urlHelper = $urlHelper;
         $this->resourceConfig = $resourceConfig;
 
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($scopeConfig, $context, $registry, $resource, $resourceCollection, $data);
     }
 
 

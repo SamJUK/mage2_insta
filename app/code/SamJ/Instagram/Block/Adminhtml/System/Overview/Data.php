@@ -5,22 +5,27 @@ namespace SamJ\Instagram\Block\Adminhtml\System\Overview;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 use SamJ\Instagram\Model\Authentication;
+use SamJ\Instagram\Model\User;
 
 class Data extends AbstractFieldArray
 {
     /** @var Authentication */
-    private $instagram;
+    private $instagram_auth;
+
+    private $instagram_user;
 
 
     /**
      * Data constructor.
-     * @param Authentication $instagram
+     * @param Authentication $instagram_auth
+     * @param User $instagram_user
      * @param Context $context
      * @param array $data
      */
-    public function __construct(Authentication $instagram, Context $context, array $data = [])
+    public function __construct(Authentication $instagram_auth, User $instagram_user, Context $context, array $data = [])
     {
-        $this->instagram = $instagram;
+        $this->instagram_auth = $instagram_auth;
+        $this->instagram_user = $instagram_user->load('self');
         parent::__construct($context, $data);
     }
 
@@ -73,7 +78,7 @@ class Data extends AbstractFieldArray
                 </button>
             </a>';
 
-        return sprintf( $template, $this->instagram->getAuthUrl() );
+        return sprintf( $template, $this->instagram_auth->getAuthUrl() );
     }
 
 
@@ -84,12 +89,12 @@ class Data extends AbstractFieldArray
      */
     private function getStatusHtml()
     {
-        $validity = $this->instagram->isAccessTokenValid()
+        $validity = $this->instagram_auth->isAccessTokenValid()
             ? '<span style="color:green;">Valid</span>'
             : '<span style="color:red;">Invalid</span>';
 
         $extra = $validity
-            ? '<span> For user <pre style="display: inline-flex;background: #f4f4f4;padding: 0 4px;border: 1px solid #eaeaea;">'.$this->instagram->getCurrentAuthenticatedUser().'</pre></span>'
+            ? '<span> For user <pre style="display: inline-flex;background: #f4f4f4;padding: 0 4px;border: 1px solid #eaeaea;">'.$this->instagram_user->getUsername().'</pre></span>'
             : '';
 
         $template = ' <strong>Access Token Status: </strong> %s %s';
